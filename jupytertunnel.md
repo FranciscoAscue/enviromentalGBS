@@ -12,15 +12,15 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD
 ```
 
 ```output
-Executing: /tmp/apt-key-gpghome.2KA46cJU5d/gpg.1.sh --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-gpg: clave 51716619E084DAB9: clave pública "Michael Rutter <marutter@gmail.com>" importada
+Executing: /tmp/apt-key-gpghome.MqY0xBaDmw/gpg.1.sh --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+gpg: clave 51716619E084DAB9: "Michael Rutter <marutter@gmail.com>" sin cambios
 gpg: Cantidad total procesada: 1
-gpg:               importadas: 1
+gpg:              sin cambios: 1
 ```
 
 #### add deb repository for cran-40 and install r-base
 ```bash
-sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/'
+sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
 sudo apt update
 sudo apt install r-base
 ```
