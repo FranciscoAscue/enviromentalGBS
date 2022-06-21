@@ -57,10 +57,20 @@ then
 		cut -f $i snp_table.tmp | awk -F':' '{print $1}' | sed "s/\//\n/g" > ${i}_s.tmp
 	done
 
+	cut -f 1,2,3 snp_table.tmp | fgrep -v "#" > tf.tmp
+
+	fgrep "#" snp_table.tmp | cut -f 1,2,3 > tf2.tmp
+	while read -r line
+	do
+		echo "$line" >> tf2.tmp
+		echo "$line" >> tf2.tmp
+	done < tf.tmp
+
 	if [ "$F" == 0 ]
 	then
-		paste *_s.tmp > ${OUT}.tsv
-		rm *tmp
+		paste *_s.tmp > ${OUT}_t.tsv
+		paste tf2.tmp ${OUT}_t.tsv > ${OUT}.tsv
+		rm *tmp 
 	elif ["$F" == 1 ]
 	then
 		paste *_s.tmp > ${OUT}.tmp
@@ -75,4 +85,7 @@ else
 	fi
 	echo "$usage"
 fi
+
+
+
 
