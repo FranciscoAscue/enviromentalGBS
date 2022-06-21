@@ -1,0 +1,78 @@
+#!/bin/bash
+
+### vcf to binary matrix #### 
+
+### Write by Francisco Ascue 
+### email francisco.ascue131@gmail.com
+
+
+usage="$(basename "$0") -- Program for make binary matrix from VCF
+usage: $(basename "$0") -v file.vcf -n <int> -o ouput
+where:
+    -h 			Show this help text
+    -v 	file.vcf	VCF file
+    -n  <integer>	Number of individuals
+    -o  ouput 		Output file name"
+
+
+### DEFAULTS 
+
+VCF=""
+N=0
+F=0
+OUT=$VCF
+
+while getopts ':h:v:n:f:o:' option; do
+  case "$option" in
+    h) echo "$usage"
+       exit
+       ;;
+    v) VCF=$OPTARG
+	;;
+    n) N=$OPTARG
+       ;;
+    f) F=$OPTARG
+	;;
+    o) OUT=$OPTARG
+	;; 
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2
+       echo "$usage" >&2
+       exit 1
+       ;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2
+       echo "$usage" >&2
+       exit 1
+       	;;
+  esac
+done
+
+
+if [ "$VCF" != "" ] && [ "$N" != 0 ]
+then 
+	fgrep -v "##" $VCF > vcf.tmp
+	cut -f 1,2,3,10-$((N+9)) vcf.tmp > snp_table.tmp
+		
+	for i in $(seq 4 $((N+3)))
+	do
+		cut -f $i snp_table.tmp | awk -F':' '{print $1}' | sed "s/\//\n/g" > ${i}_s.tmp
+	done
+
+	if [ "$F" == 0 ]
+	then
+		paste *_s.tmp > ${OUT}.tsv
+		rm *tmp
+	elif ["$F" == 1 ]
+	then
+		paste *_s.tmp > ${OUT}.tmp
+		cat ${OUT}.tmp | fgrep -v "." > ${OUT}.tsv
+		rm *tmp
+	fi
+
+else
+	if [ "$VCF" != "" ]
+	then
+		>&2 echo "VCF file missing"
+	fi
+	echo "$usage"
+fi
+
